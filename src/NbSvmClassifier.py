@@ -37,6 +37,11 @@ class NbSvmClassifier(BaseEstimator, ClassifierMixin):
             return (p+1) / ((y==y_i).sum()+1)
         self._r = np.log(pr(x,1,y) / pr(x,0,y))
         self._clf = LogisticRegression(C=self.C, dual=self.dual, n_jobs=self.n_jobs)
-        x_nb = x * self._r
+        
+        try:
+            x_nb = x * self._r
+        except:
+            x_nb = x.multiply(self._r)
+    
         self._clf.fit(x_nb, y)
         return self
